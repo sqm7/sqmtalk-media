@@ -69,7 +69,7 @@ h2 { font-size: clamp(34px, 4vw, 62px); }
 .post-views small { display: block; margin-top: 8px; color: var(--muted); font: 10px "Noto Sans TC", sans-serif; letter-spacing: .16em; }
 .threads-badge, .threads-footer-link { display: inline-flex; align-items: center; gap: 8px; color: var(--muted); font-size: 12px; }
 .threads-badge:hover, .threads-footer-link:hover { color: var(--paper); }
-.threads-glyph { display: inline-grid; place-items: center; width: 21px; height: 21px; border: 1px solid currentColor; border-radius: 50%; font: 600 15px/1 Georgia, serif; letter-spacing: 0; }
+.threads-glyph { width: 18px; height: 18px; fill: currentColor; flex: 0 0 auto; }
 .post-loading { padding: 30px 0; color: var(--muted); }
 
 .about, .collaboration { display: grid; grid-template-columns: 88px minmax(0, 1.2fr) minmax(260px, .62fr); gap: 32px; padding: 150px 0; border-bottom: 1px solid var(--line); }
