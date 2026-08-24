@@ -9,6 +9,10 @@ function formatViews(value) {
   return new Intl.NumberFormat("zh-TW").format(Number(value) || 0);
 }
 
+function withoutFullStops(value) {
+  return String(value || "").replace(/[。．]/g, "");
+}
+
 function metricChip(icon, label, value) {
   const chip = document.createElement("span");
   const glyph = document.createElement("span");
@@ -27,7 +31,7 @@ function showPosts(payload, fallback = false) {
   const posts = allPosts.slice(0, visibleCount);
   postsRoot.replaceChildren();
   if (!posts.length) {
-    postsRoot.textContent = "作品集暫時無法顯示。";
+    postsRoot.textContent = "作品集暫時無法顯示";
     return;
   }
   posts.forEach((post, index) => {
@@ -42,10 +46,10 @@ function showPosts(payload, fallback = false) {
     link.href = post.permalink;
     link.target = "_blank";
     link.rel = "noreferrer";
-    link.textContent = post.title || "查看 Threads 貼文";
+    link.textContent = withoutFullStops(post.title) || "查看 Threads 貼文";
     const excerpt = document.createElement("p");
     excerpt.className = "post-excerpt";
-    excerpt.textContent = post.excerpt || "";
+    excerpt.textContent = withoutFullStops(post.excerpt);
     const metricEntries = [
       ["♡", "喜歡", post.likes],
       ["◌", "回覆", post.replies],
