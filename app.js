@@ -1,13 +1,30 @@
 const endpoint = "https://zxbmbbfrzbtuueysicoc.supabase.co/functions/v1/sqm-media-top-posts";
 const postsRoot = document.querySelector("#post-list");
 const statusRoot = document.querySelector("#data-status");
+const showMoreButton = document.querySelector("#show-more");
+let activePayload = null;
+let visibleCount = 3;
 
 function formatViews(value) {
   return new Intl.NumberFormat("zh-TW").format(Number(value) || 0);
 }
 
+function metricChip(icon, label, value) {
+  const chip = document.createElement("span");
+  const glyph = document.createElement("span");
+  glyph.className = "metric-icon";
+  glyph.setAttribute("aria-hidden", "true");
+  glyph.textContent = icon;
+  const text = document.createElement("span");
+  text.textContent = `${label} ${formatViews(value)}`;
+  chip.append(glyph, text);
+  return chip;
+}
+
 function showPosts(payload, fallback = false) {
-  const posts = Array.isArray(payload?.data) ? payload.data.slice(0, 3) : [];
+  activePayload = payload;
+  const allPosts = Array.isArray(payload?.data) ? payload.data : [];
+  const posts = allPosts.slice(0, visibleCount);
   postsRoot.replaceChildren();
   if (!posts.length) {
     postsRoot.textContent = "代表作暫時無法顯示。";
@@ -29,7 +46,16 @@ function showPosts(payload, fallback = false) {
     const excerpt = document.createElement("p");
     excerpt.className = "post-excerpt";
     excerpt.textContent = post.excerpt || "";
-    copy.append(link, excerpt);
+    const engagement = document.createElement("div");
+    engagement.className = "post-engagement";
+    engagement.append(
+      metricChip("♡", "喜歡", post.likes),
+      metricChip("◌", "回覆", post.replies),
+      metricChip("↻", "轉發", post.reposts),
+      metricChip("↗", "引用", post.quotes),
+      metricChip("⇧", "分享", post.shares),
+    );
+    copy.append(link, excerpt, engagement);
     const meta = document.createElement("div");
     meta.className = "post-meta";
     const views = document.createElement("strong");
@@ -54,10 +80,17 @@ function showPosts(payload, fallback = false) {
     item.append(rank, copy, meta);
     postsRoot.append(item);
   });
+  showMoreButton.hidden = fallback || allPosts.length <= 3 || visibleCount >= allPosts.length;
   if (fallback) statusRoot.textContent = "代表作快照（資料暫時更新中）";
   else if (payload?.meta?.stale) statusRoot.textContent = "資料更新中（顯示最近一次觀測）";
   else statusRoot.textContent = "依目前已同步內容的瀏覽數排序";
 }
+
+showMoreButton.addEventListener("click", () => {
+  visibleCount = 10;
+  showPosts(activePayload);
+  showMoreButton.focus();
+});
 
 async function loadPosts() {
   const controller = new AbortController();
