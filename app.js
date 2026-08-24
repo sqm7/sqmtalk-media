@@ -1,4 +1,4 @@
-const endpoint = "https://zxbmbbfrzbtuueysicoc.supabase.co/functions/v1/sqm-media-top-posts?format=media-v2";
+const endpoint = "https://zxbmbbfrzbtuueysicoc.supabase.co/functions/v1/sqm-media-top-posts?format=media-v3";
 const postsRoot = document.querySelector("#post-list");
 const statusRoot = document.querySelector("#data-status");
 const showMoreButton = document.querySelector("#show-more");
@@ -27,7 +27,7 @@ function showPosts(payload, fallback = false) {
   const posts = allPosts.slice(0, visibleCount);
   postsRoot.replaceChildren();
   if (!posts.length) {
-    postsRoot.textContent = "代表作暫時無法顯示。";
+    postsRoot.textContent = "作品集暫時無法顯示。";
     return;
   }
   posts.forEach((post, index) => {
@@ -89,7 +89,7 @@ function showPosts(payload, fallback = false) {
     postsRoot.append(item);
   });
   showMoreButton.hidden = fallback || allPosts.length <= 3 || visibleCount >= allPosts.length;
-  if (fallback) statusRoot.textContent = "代表作快照（資料暫時更新中）";
+  if (fallback) statusRoot.textContent = "作品集快照（資料暫時更新中）";
   else if (payload?.meta?.stale) statusRoot.textContent = "資料更新中（顯示最近一次觀測）";
   else statusRoot.textContent = "依目前已同步內容的瀏覽數排序";
 }
