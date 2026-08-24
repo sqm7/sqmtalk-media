@@ -81,15 +81,15 @@ h2 { font-size: clamp(34px, 4vw, 62px); }
 .account-overview-footnote { display: flex; justify-content: space-between; gap: 18px; margin-top: 20px; color: var(--muted); font-size: 10px; }
 .account-overview-footnote strong { color: var(--paper); font-weight: 500; }
 .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
-.account-aside { grid-column: 2 / 4; grid-row: 2; align-self: stretch; width: 100%;   padding: 24px 0 22px; border-right: 0; border-left: 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); background: transparent; }
+.account-aside { width: min(100%, 540px); margin-top: 22px; padding: 14px 0 0; border: 0; background: transparent; }
 
-.account-aside .account-metrics { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); margin: 0; border: 0; }
-.account-aside .account-metric { padding: 0 18px; border: 0; border-left: 1px solid var(--line-soft); }
-  .account-aside .account-metric-label { font-size: 12px; letter-spacing: .12em; }
+.account-aside .account-metrics { display: grid; grid-template-columns: 1.45fr repeat(5, minmax(0, 1fr)); margin: 0; border: 0; }
+.account-aside .account-metric { padding: 0 11px; border: 0; border-left: 1px solid var(--line-soft); }
+  .account-aside .account-metric-label { font-size: 10px; letter-spacing: .08em; }
 .account-aside .account-metric:first-child { border-left: 0; }
 .account-aside .account-metric-primary { grid-column: auto; display: block; }
-.account-aside .account-metric strong { margin-top: 7px; font-size: 32px; }
-.account-aside .account-metric-primary strong { margin-top: 7px; font-size: 42px; }
+.account-aside .account-metric strong { margin-top: 6px; font-size: 25px; }
+.account-aside .account-metric-primary strong { margin-top: 6px; font-size: 34px; }
 .phone-stage { grid-column: 3; grid-row: 1; align-self: end; justify-self: center; display: flex; flex-direction: column; align-items: center; padding-top: 24px; }
 .phone-mockup { position: relative; width: min(100%, 264px); aspect-ratio: .48; padding: 11px; border: 1px solid var(--paper); border-radius: 31px; background: var(--ink); box-shadow: 0 0 0 1px rgba(240, 236, 227, .14), 18px 22px 0 rgba(240, 236, 227, .025); transform: rotate(4deg); }
 .phone-mockup::before { content: ""; position: absolute; inset: 5px; border: 1px solid var(--line-soft); border-radius: 26px; pointer-events: none; }
@@ -198,12 +198,12 @@ h2 { font-size: clamp(34px, 4vw, 62px); }
   .threads-overview-copy, .account-overview, .phone-stage { grid-column: auto; grid-row: auto; }
   .threads-overview-copy h2, .about-copy h2, .collaboration > div:nth-child(2) h2 { font-size: clamp(38px, 10.3vw, 46px); line-height: 1.16; letter-spacing: -.035em; }
   .account-overview, .account-aside { width: 100%; padding: 20px 0; }
-  .account-aside { display: block; border-right: 0; border-left: 0; }
+  .account-aside { display: block; margin-top: 22px; border-right: 0; border-left: 0; }
   .account-overview-heading { align-items: start; flex-direction: column; gap: 10px; }
   .account-aside .account-overview-heading { padding-bottom: 16px; border-bottom: 1px solid var(--line); }
   .account-data-status { max-width: none; text-align: left; }
   .account-metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .account-aside .account-metrics { grid-template-columns: repeat(3, minmax(0, 1fr)); margin-top: 16px; border-top: 1px solid var(--line-soft); border-left: 1px solid var(--line-soft); }
+  .account-aside .account-metrics { grid-template-columns: 1.45fr repeat(2, minmax(0, 1fr)); margin-top: 0; border-top: 1px solid var(--line-soft); border-left: 1px solid var(--line-soft); }
   .account-aside .account-metric { padding: 12px 11px 13px; border-right: 1px solid var(--line-soft); border-bottom: 1px solid var(--line-soft); border-left: 0; }
   .account-metric-icon { width: 15px; height: 15px; flex-basis: 15px; }
   .account-metric-primary { grid-column: 1 / -1; }
@@ -211,7 +211,6 @@ h2 { font-size: clamp(34px, 4vw, 62px); }
   .account-aside .account-overview-footnote { margin-top: 16px; }
   .account-aside .account-scope-note { margin-top: 14px; }
   .phone-stage { order: 2; align-items: flex-end; padding: 58px 22px 0 0; }
-  .account-aside { order: 3; }
   .phone-mockup { width: min(264px, 72vw); }
   .about, .collaboration { padding: 92px 0; overflow: visible; }
   .about { gap: 25px; align-items: start; padding: 76px 0 84px; }
