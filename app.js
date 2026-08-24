@@ -1,4 +1,4 @@
-const endpoint = "https://zxbmbbfrzbtuueysicoc.supabase.co/functions/v1/sqm-media-top-posts?format=media-v3";
+const endpoint = "https://zxbmbbfrzbtuueysicoc.supabase.co/functions/v1/sqm-media-top-posts?format=media-v3&view=content-totals-v1";
 const postsRoot = document.querySelector("#post-list");
 const statusRoot = document.querySelector("#data-status");
 const showMoreButton = document.querySelector("#show-more");
