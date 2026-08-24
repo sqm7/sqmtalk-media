@@ -1,4 +1,4 @@
-const endpoint = "https://zxbmbbfrzbtuueysicoc.supabase.co/functions/v1/sqm-media-top-posts";
+const endpoint = "https://zxbmbbfrzbtuueysicoc.supabase.co/functions/v1/sqm-media-top-posts?format=media-v2";
 const postsRoot = document.querySelector("#post-list");
 const statusRoot = document.querySelector("#data-status");
 const showMoreButton = document.querySelector("#show-more");
@@ -46,16 +46,21 @@ function showPosts(payload, fallback = false) {
     const excerpt = document.createElement("p");
     excerpt.className = "post-excerpt";
     excerpt.textContent = post.excerpt || "";
-    const engagement = document.createElement("div");
-    engagement.className = "post-engagement";
-    engagement.append(
-      metricChip("♡", "喜歡", post.likes),
-      metricChip("◌", "回覆", post.replies),
-      metricChip("↻", "轉發", post.reposts),
-      metricChip("↗", "引用", post.quotes),
-      metricChip("⇧", "分享", post.shares),
-    );
-    copy.append(link, excerpt, engagement);
+    const metricEntries = [
+      ["♡", "喜歡", post.likes],
+      ["◌", "回覆", post.replies],
+      ["↻", "轉發", post.reposts],
+      ["↗", "引用", post.quotes],
+      ["⇧", "分享", post.shares],
+    ].filter(([, , value]) => value !== undefined && value !== null);
+    if (metricEntries.length) {
+      const engagement = document.createElement("div");
+      engagement.className = "post-engagement";
+      metricEntries.forEach(([icon, label, value]) => engagement.append(metricChip(icon, label, value)));
+      copy.append(link, excerpt, engagement);
+    } else {
+      copy.append(link, excerpt);
+    }
     const meta = document.createElement("div");
     meta.className = "post-meta";
     const views = document.createElement("strong");
@@ -64,8 +69,11 @@ function showPosts(payload, fallback = false) {
     const viewsUnit = document.createElement("small");
     viewsUnit.textContent = "VIEWS";
     views.append(viewsUnit);
-    const threads = document.createElement("span");
+    const threads = document.createElement("a");
     threads.className = "threads-badge";
+    threads.href = post.permalink;
+    threads.target = "_blank";
+    threads.rel = "noreferrer";
     const threadsIcon = document.createElementNS("http://www.w3.org/2000/svg", "svg");
     threadsIcon.className = "threads-glyph";
     threadsIcon.setAttribute("viewBox", "0 0 24 24");
