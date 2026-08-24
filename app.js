@@ -2,11 +2,23 @@ const endpoint = "https://zxbmbbfrzbtuueysicoc.supabase.co/functions/v1/sqm-medi
 const postsRoot = document.querySelector("#post-list");
 const statusRoot = document.querySelector("#data-status");
 const showMoreButton = document.querySelector("#show-more");
+const accountStatusRoot = document.querySelector("#account-data-status");
+const accountSnapshotRoot = document.querySelector("#account-snapshot-at");
 let activePayload = null;
 let visibleCount = 3;
 
 function formatViews(value) {
   return new Intl.NumberFormat("zh-TW").format(Number(value) || 0);
+}
+
+function formatSnapshotDate(value) {
+  const timestamp = Date.parse(String(value || ""));
+  if (!Number.isFinite(timestamp)) return "尚未同步";
+  return new Intl.DateTimeFormat("zh-TW", {
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  }).format(new Date(timestamp));
 }
 
 function withoutFullStops(value) {
@@ -23,6 +35,26 @@ function metricChip(icon, label, value) {
   text.textContent = `${label} ${formatViews(value)}`;
   chip.append(glyph, text);
   return chip;
+}
+
+function showAccountSummary(totals, fallback = false) {
+  const accountData = totals && typeof totals === "object" ? totals : null;
+  const metricKeys = ["views", "likes", "replies", "reposts", "quotes", "shares", "postsCount"];
+  metricKeys.forEach((key) => {
+    const target = document.querySelector(`[data-metric="${key}"]`);
+    if (!target) return;
+    const value = accountData?.[key];
+    target.textContent = value === null || value === undefined ? "—" : formatViews(value);
+  });
+  if (accountSnapshotRoot) accountSnapshotRoot.textContent = formatSnapshotDate(accountData?.latestSnapshotAt);
+  if (!accountStatusRoot) return;
+  if (!accountData) {
+    accountStatusRoot.textContent = "帳號總覽尚待同步";
+  } else if (fallback) {
+    accountStatusRoot.textContent = "總覽快照（資料暫時更新中）";
+  } else {
+    accountStatusRoot.textContent = "目前已同步貼文的最新成效加總";
+  }
 }
 
 function showPosts(payload, fallback = false) {
@@ -112,12 +144,15 @@ async function loadPosts() {
     if (!response.ok) throw new Error("content unavailable");
     const payload = await response.json();
     showPosts(payload);
+    showAccountSummary(payload?.contentTotals ?? window.SQM_FALLBACK_ACCOUNT?.data, !payload?.contentTotals);
   } catch {
     showPosts(window.SQM_FALLBACK_POSTS, true);
+    showAccountSummary(window.SQM_FALLBACK_ACCOUNT?.data, true);
   } finally {
     window.clearTimeout(timer);
   }
 }
 
 document.querySelector("#year").textContent = String(new Date().getFullYear());
+showAccountSummary(null);
 loadPosts();

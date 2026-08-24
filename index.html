@@ -46,6 +46,89 @@
         </div>
       </section>
 
+      <section class="threads-overview shell" id="threads" aria-labelledby="threads-title">
+        <div class="section-index">01</div>
+        <div class="threads-overview-copy">
+          <p class="eyebrow">THREADS / SQM TALK</p>
+          <h2 id="threads-title">把市場觀察，<br />放進一個正在發生的帳號</h2>
+          <p>平米內參把預售成交資料，寫成 Threads 上可以被看見、被討論的市場觀察。</p>
+          <a class="button button-quiet" href="https://www.threads.com/@sqmtalk" target="_blank" rel="noreferrer">查看 Threads 帳號 <span aria-hidden="true">↗</span></a>
+        </div>
+        <div class="account-overview" aria-labelledby="account-overview-title">
+          <div class="account-overview-heading">
+            <div>
+              <p class="eyebrow">ACCOUNT OVERVIEW</p>
+              <h3 id="account-overview-title">已同步內容總覽</h3>
+            </div>
+            <p id="account-data-status" class="account-data-status" aria-live="polite">讀取目前同步內容中</p>
+          </div>
+          <div class="account-metrics" id="account-metrics" aria-live="polite">
+            <div class="account-metric account-metric-primary">
+              <span class="account-metric-label">觀看</span>
+              <strong data-metric="views">—</strong>
+            </div>
+            <div class="account-metric">
+              <span class="account-metric-label">愛心</span>
+              <strong data-metric="likes">—</strong>
+            </div>
+            <div class="account-metric">
+              <span class="account-metric-label">回覆</span>
+              <strong data-metric="replies">—</strong>
+            </div>
+            <div class="account-metric">
+              <span class="account-metric-label">轉發</span>
+              <strong data-metric="reposts">—</strong>
+            </div>
+            <div class="account-metric">
+              <span class="account-metric-label">引用</span>
+              <strong data-metric="quotes">—</strong>
+            </div>
+            <div class="account-metric">
+              <span class="account-metric-label">分享</span>
+              <strong data-metric="shares">—</strong>
+            </div>
+          </div>
+          <div class="account-overview-footnote">
+            <span><strong data-metric="postsCount">—</strong> 篇已同步貼文</span>
+            <span>最新快照 <time id="account-snapshot-at">—</time></span>
+          </div>
+          <p class="account-scope-note">數據範圍：目前已同步貼文的最新成效快照加總，不等同 Threads 官方帳號 Insights。</p>
+        </div>
+        <div class="phone-stage">
+          <div class="phone-mockup" role="img" aria-label="以米白線條勾勒的手機，螢幕顯示 Threads 平米內參首頁">
+            <div class="phone-speaker" aria-hidden="true"></div>
+            <div class="phone-camera" aria-hidden="true"></div>
+            <div class="phone-screen">
+              <div class="phone-topbar">
+                <span class="phone-threads-wordmark">threads</span>
+                <span class="phone-topbar-actions" aria-hidden="true">⌕　♡</span>
+              </div>
+              <div class="phone-profile">
+                <div class="phone-avatar">平<br />米</div>
+                <div>
+                  <strong>平米內參</strong>
+                  <small>@sqmtalk</small>
+                </div>
+                <span class="phone-follow">追蹤</span>
+              </div>
+              <div class="phone-post">
+                <div class="phone-post-meta"><strong>平米內參</strong><span>· 2 小時</span></div>
+                <p>別人看房價，<br />我看房價怎麼改變人的位置與生活</p>
+                <div class="phone-post-line" aria-hidden="true"></div>
+                <div class="phone-post-actions" aria-hidden="true">♡　◌　↻　⇧</div>
+              </div>
+              <div class="phone-post phone-post-faded" aria-hidden="true">
+                <div class="phone-post-meta"><strong>平米內參</strong><span>· 昨天</span></div>
+                <p>同一筆預算，<br />會把人推向不同的地方</p>
+                <div class="phone-post-line short"></div>
+              </div>
+            </div>
+            <div class="phone-home-indicator" aria-hidden="true"></div>
+          </div>
+          <p class="phone-caption">@sqmtalk / THREADS</p>
+        </div>
+      </section>
+
       <section class="work shell" id="work" aria-labelledby="work-title">
         <div class="section-heading">
           <div>
@@ -99,6 +182,7 @@
       <small>© <span id="year"></span> SQM TALK</small>
     </footer>
     <script src="./fallback-posts.js"></script>
+    <script src="./fallback-account.js"></script>
     <script src="./app.js"></script>
   </body>
 </html>
