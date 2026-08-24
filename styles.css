@@ -67,7 +67,14 @@ h2 { font-size: clamp(34px, 4vw, 62px); }
 .account-metrics { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); margin-top: 18px; border-top: 1px solid var(--line-soft); border-left: 1px solid var(--line-soft); }
 .account-metric { min-width: 0; padding: 16px 14px 18px; border-right: 1px solid var(--line-soft); border-bottom: 1px solid var(--line-soft); }
 .account-metric-primary { grid-column: 1 / -1; display: flex; align-items: baseline; justify-content: space-between; gap: 16px; }
-.account-metric-label { display: block; color: var(--muted); font-size: 11px; letter-spacing: .14em; }
+.account-metric-label { display: inline-flex; align-items: center; gap: 7px; color: var(--muted); font-size: 11px; letter-spacing: .14em; }
+.account-metric-icon { display: inline-block; width: 16px; height: 16px; flex: 0 0 16px; background: currentColor; mask: center / contain no-repeat; -webkit-mask: center / contain no-repeat; }
+.icon-eye { mask-image: url("./assets/icons/eye.svg"); -webkit-mask-image: url("./assets/icons/eye.svg"); }
+.icon-heart { mask-image: url("./assets/icons/heart.svg"); -webkit-mask-image: url("./assets/icons/heart.svg"); }
+.icon-message-circle { mask-image: url("./assets/icons/message-circle.svg"); -webkit-mask-image: url("./assets/icons/message-circle.svg"); }
+.icon-repeat-2 { mask-image: url("./assets/icons/repeat-2.svg"); -webkit-mask-image: url("./assets/icons/repeat-2.svg"); }
+.icon-quote { mask-image: url("./assets/icons/quote.svg"); -webkit-mask-image: url("./assets/icons/quote.svg"); }
+.icon-send { mask-image: url("./assets/icons/send.svg"); -webkit-mask-image: url("./assets/icons/send.svg"); }
 .account-metric strong { display: block; margin-top: 8px; color: var(--paper); font: 600 clamp(20px, 2.2vw, 30px)/1 "Noto Serif TC", serif; letter-spacing: -.045em; white-space: nowrap; }
 .account-metric-primary strong { margin-top: 0; font-size: clamp(35px, 4vw, 56px); }
 .account-overview-footnote { display: flex; justify-content: space-between; gap: 18px; margin-top: 20px; color: var(--muted); font-size: 10px; }
@@ -77,7 +84,7 @@ h2 { font-size: clamp(34px, 4vw, 62px); }
 
 .account-aside .account-metrics { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); margin: 0; border: 0; }
 .account-aside .account-metric { padding: 0 18px; border: 0; border-left: 1px solid var(--line-soft); }
-.account-aside .account-metric-label { font-size: 12px; letter-spacing: .12em; }
+  .account-aside .account-metric-label { font-size: 12px; letter-spacing: .12em; }
 .account-aside .account-metric:first-child { border-left: 0; }
 .account-aside .account-metric-primary { grid-column: auto; display: block; }
 .account-aside .account-metric strong { margin-top: 7px; font-size: 32px; }
@@ -198,6 +205,7 @@ h2 { font-size: clamp(34px, 4vw, 62px); }
   .account-metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .account-aside .account-metrics { grid-template-columns: repeat(3, minmax(0, 1fr)); margin-top: 16px; border-top: 1px solid var(--line-soft); border-left: 1px solid var(--line-soft); }
   .account-aside .account-metric { padding: 12px 11px 13px; border-right: 1px solid var(--line-soft); border-bottom: 1px solid var(--line-soft); border-left: 0; }
+  .account-metric-icon { width: 15px; height: 15px; flex-basis: 15px; }
   .account-metric-primary { grid-column: 1 / -1; }
   .account-overview-footnote { align-items: start; flex-direction: column; gap: 7px; }
   .account-aside .account-overview-footnote { margin-top: 16px; }
