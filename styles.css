@@ -31,14 +31,14 @@ nav { display: flex; gap: 24px; color: var(--muted); font-size: 13px; }
 nav a:hover, .tool-link:hover, .footer-links a:hover { color: var(--paper); }
 .tool-link { justify-self: end; font-size: 13px; border-bottom: 1px solid var(--line); padding-bottom: 3px; }
 
-.hero { min-height: min(800px, calc(100vh - 88px)); padding: 35px 0 40px; display: flex; flex-direction: column; justify-content: space-between; position: relative; overflow: hidden; isolation: isolate; }
+.hero { min-height: min(800px, calc(100vh - 88px)); padding: 35px 0 40px; position: relative; overflow: hidden; isolation: isolate; }
 .hero::before { content: ""; position: absolute; z-index: 0; inset: 0; background: url("./assets/hero/greater-taipei-taoyuan-network-v1.png") right center / auto 100% no-repeat; opacity: .64; pointer-events: none; }
 .hero::after { content: ""; position: absolute; z-index: 1; inset: 0; background: linear-gradient(90deg, #000 0%, rgba(0, 0, 0, .98) 30%, rgba(0, 0, 0, .52) 55%, rgba(0, 0, 0, .04) 82%); pointer-events: none; }
 .eyebrow, .issue, .section-index { margin: 0; color: var(--muted); font-size: 11px; letter-spacing: .18em; }
-.hero-topline { position: relative; z-index: 2; display: flex; justify-content: space-between; align-items: center; }
+.hero-topline { position: relative; z-index: 2; display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }
 .hero-edition { margin: 0; color: var(--muted); font-size: 11px; letter-spacing: .15em; }
 .hero-grid { display: block; }
-.hero-copy { position: relative; z-index: 2; width: min(100%, 850px); padding: 75px 0 28px; }
+.hero-copy { position: relative; z-index: 2; width: min(100%, 850px); padding: 30px 0 28px; }
 .issue { margin: 0 0 20px; }
 h1, h2 { margin: 0; font-family: "Noto Serif TC", serif; font-weight: 600; letter-spacing: -.04em; line-height: 1.22; }
 h1 { font-size: clamp(47px, 7vw, 104px); }
@@ -180,14 +180,12 @@ h2 { font-size: clamp(34px, 4vw, 62px); }
   .site-header { min-height: 76px; grid-template-columns: 1fr auto; }
   nav { display: none; }
   .brand img { width: 34px; height: 34px; }
-  /* Keep the editorial split layout on desktop, but do not use the unused
-     vertical space to separate the mobile hero headline from its eyebrow. */
-  .hero { min-height: 690px; padding: 28px 0 0; justify-content: flex-start; }
+  .hero { min-height: 690px; padding: 28px 0 0; }
   .hero::before { background-size: auto 72%; background-position: right bottom; opacity: .68; }
   .hero::after { background: linear-gradient(180deg, #000 0%, rgba(0, 0, 0, .88) 38%, rgba(0, 0, 0, .38) 100%); }
-  .hero-topline { margin-bottom: 34px; }
+  .hero-topline { margin-bottom: 24px; }
   .hero-grid, .about, .collaboration, .threads-overview { grid-template-columns: 1fr; gap: 25px; }
-  .hero-copy { width: 100%; padding: 42px 0 35px; }
+  .hero-copy { width: 100%; padding: 0 0 35px; }
   .work { padding-top: 80px; }
   .section-heading { align-items: start; }
   .data-status { text-align: left; max-width: 130px; }
