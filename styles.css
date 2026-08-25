@@ -183,8 +183,8 @@ h2 { font-size: clamp(34px, 4vw, 62px); }
   /* Keep the editorial split layout on desktop, but do not use the unused
      vertical space to separate the mobile hero headline from its eyebrow. */
   .hero { min-height: 690px; padding: 28px 0 0; justify-content: flex-start; }
-  .hero::before { background-size: auto 62%; background-position: right bottom; opacity: .43; }
-  .hero::after { background: linear-gradient(180deg, #000 0%, rgba(0, 0, 0, .95) 42%, rgba(0, 0, 0, .58) 100%); }
+  .hero::before { background-size: auto 72%; background-position: right bottom; opacity: .68; }
+  .hero::after { background: linear-gradient(180deg, #000 0%, rgba(0, 0, 0, .88) 38%, rgba(0, 0, 0, .38) 100%); }
   .hero-topline { margin-bottom: 34px; }
   .hero-grid, .about, .collaboration, .threads-overview { grid-template-columns: 1fr; gap: 25px; }
   .hero-copy { width: 100%; padding: 42px 0 35px; }
