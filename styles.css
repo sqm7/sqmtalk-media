@@ -180,7 +180,9 @@ h2 { font-size: clamp(34px, 4vw, 62px); }
   .site-header { min-height: 76px; grid-template-columns: 1fr auto; }
   nav { display: none; }
   .brand img { width: 34px; height: 34px; }
-  .hero { min-height: 690px; padding: 28px 0 0; }
+  /* Keep the editorial split layout on desktop, but do not use the unused
+     vertical space to separate the mobile hero headline from its eyebrow. */
+  .hero { min-height: 690px; padding: 28px 0 0; justify-content: flex-start; }
   .hero::before { background-size: auto 62%; background-position: right bottom; opacity: .43; }
   .hero::after { background: linear-gradient(180deg, #000 0%, rgba(0, 0, 0, .95) 42%, rgba(0, 0, 0, .58) 100%); }
   .hero-topline { margin-bottom: 34px; }
