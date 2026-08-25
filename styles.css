@@ -32,7 +32,7 @@ nav a:hover, .tool-link:hover, .footer-links a:hover { color: var(--paper); }
 .tool-link { justify-self: end; font-size: 13px; border-bottom: 1px solid var(--line); padding-bottom: 3px; }
 
 .hero { min-height: min(800px, calc(100vh - 88px)); padding: 35px 0 40px; position: relative; overflow: hidden; isolation: isolate; }
-.hero::before { content: ""; position: absolute; z-index: 0; inset: 0; background: url("./assets/hero/greater-taipei-taoyuan-network-v1.png") right center / auto 100% no-repeat; opacity: .64; pointer-events: none; }
+.hero::before { content: ""; position: absolute; z-index: 0; inset: 0; background: url("./assets/hero/greater-taipei-taoyuan-network-v1.png") right 72% / auto 132% no-repeat; opacity: .64; pointer-events: none; }
 .hero::after { content: ""; position: absolute; z-index: 1; inset: 0; background: linear-gradient(90deg, #000 0%, rgba(0, 0, 0, .98) 30%, rgba(0, 0, 0, .52) 55%, rgba(0, 0, 0, .04) 82%); pointer-events: none; }
 .eyebrow, .issue, .section-index { margin: 0; color: var(--muted); font-size: 11px; letter-spacing: .18em; }
 .hero-topline { position: relative; z-index: 2; display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }
