@@ -6,9 +6,6 @@ const accountStatusRoot = document.querySelector("#account-data-status");
 const accountSnapshotRoot = document.querySelector("#account-snapshot-at");
 let activePayload = null;
 let visibleCount = 3;
-const threadsWebFallbackPanel = document.querySelector("#threads-web-fallback-panel");
-const threadsWebFallbackLink = document.querySelector("#threads-web-fallback-link");
-const threadsWebFallbackClose = document.querySelector("#threads-web-fallback-close");
 let pendingThreadsLaunchTimer = null;
 
 function threadsShortcode(permalink) {
@@ -23,45 +20,32 @@ function isMobileDevice() {
   return /android|iphone|ipad|ipod/i.test(navigator.userAgent);
 }
 
-function threadsExternalBrowserUrl(permalink) {
-  if (!/iphone|ipad|ipod/i.test(navigator.userAgent)) return permalink;
-  try {
-    const url = new URL(permalink);
-    return `x-safari-https://${url.host}${url.pathname}${url.search}${url.hash}`;
-  } catch {
-    return permalink;
-  }
+function threadsStoreUrl() {
+  return /android/i.test(navigator.userAgent)
+    ? "https://play.google.com/store/apps/details?id=com.instagram.barcelona"
+    : "https://apps.apple.com/app/threads-an-instagram-app/id6446901002";
 }
 
-function showThreadsWebFallback(permalink) {
-  if (!threadsWebFallbackPanel || !threadsWebFallbackLink) return;
-  threadsWebFallbackLink.href = threadsExternalBrowserUrl(permalink);
-  threadsWebFallbackPanel.hidden = false;
-  threadsWebFallbackLink.focus();
-}
-
-function resetThreadsWebFallback() {
+function cancelThreadsStoreFallback() {
   if (pendingThreadsLaunchTimer !== null) {
     window.clearTimeout(pendingThreadsLaunchTimer);
     pendingThreadsLaunchTimer = null;
   }
-  if (threadsWebFallbackPanel) threadsWebFallbackPanel.hidden = true;
 }
 
 function configureThreadsLink(link, permalink) {
   link.href = permalink;
   link.rel = "noopener";
   const shortcode = threadsShortcode(permalink);
-  if (!shortcode) return;
+  if (!shortcode || !isMobileDevice()) return;
+  link.href = `barcelona://media?shortcode=${encodeURIComponent(shortcode)}`;
   link.addEventListener("click", (event) => {
-    if (!isMobileDevice()) return;
-    event.preventDefault();
-    resetThreadsWebFallback();
+    if (event.defaultPrevented) return;
+    cancelThreadsStoreFallback();
     pendingThreadsLaunchTimer = window.setTimeout(() => {
       pendingThreadsLaunchTimer = null;
-      if (document.visibilityState === "visible") showThreadsWebFallback(permalink);
-    }, 1000);
-    window.location.href = `barcelona://media?shortcode=${encodeURIComponent(shortcode)}`;
+      if (document.visibilityState === "visible") window.location.assign(threadsStoreUrl());
+    }, 1200);
   });
 }
 
@@ -194,14 +178,10 @@ showMoreButton.addEventListener("click", () => {
   showMoreButton.focus();
 });
 
-threadsWebFallbackClose?.addEventListener("click", () => {
-  resetThreadsWebFallback();
-});
-
-window.addEventListener("pagehide", resetThreadsWebFallback);
-window.addEventListener("pageshow", resetThreadsWebFallback);
+window.addEventListener("pagehide", cancelThreadsStoreFallback);
+window.addEventListener("pageshow", cancelThreadsStoreFallback);
 document.addEventListener("visibilitychange", () => {
-  if (document.visibilityState === "hidden") resetThreadsWebFallback();
+  if (document.visibilityState === "hidden") cancelThreadsStoreFallback();
 });
 
 async function loadPosts() {
