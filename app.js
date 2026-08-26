@@ -6,50 +6,20 @@ const accountStatusRoot = document.querySelector("#account-data-status");
 const accountSnapshotRoot = document.querySelector("#account-snapshot-at");
 let activePayload = null;
 let visibleCount = 3;
-const threadsFallbackRoot = document.querySelector("#threads-app-fallback");
-const threadsWebFallback = document.querySelector("#threads-web-fallback");
-const threadsStoreFallback = document.querySelector("#threads-store-fallback");
-const threadsFallbackClose = document.querySelector("#threads-app-fallback-close");
 
-function threadsShortcode(permalink) {
+function threadsUniversalUrl(permalink) {
   try {
-    return new URL(permalink).pathname.match(/\/post\/([^/?#]+)/)?.[1] || null;
+    const url = new URL(permalink);
+    url.hostname = "www.threads.net";
+    return url.href;
   } catch {
-    return null;
+    return permalink;
   }
-}
-
-function isMobileDevice() {
-  return /android|iphone|ipad|ipod/i.test(navigator.userAgent);
-}
-
-function showThreadsFallback(permalink) {
-  if (!threadsFallbackRoot || !threadsWebFallback) return;
-  threadsWebFallback.href = permalink;
-  if (threadsStoreFallback) {
-    threadsStoreFallback.href = /android/i.test(navigator.userAgent)
-      ? "https://play.google.com/store/apps/details?id=com.instagram.barcelona"
-      : "https://apps.apple.com/app/threads-an-instagram-app/id6446901002";
-  }
-  threadsFallbackRoot.hidden = false;
-  threadsWebFallback.focus();
 }
 
 function configureThreadsLink(link, permalink) {
-  link.href = permalink;
+  link.href = threadsUniversalUrl(permalink);
   link.rel = "noopener";
-  const shortcode = threadsShortcode(permalink);
-  if (!shortcode) return;
-  link.addEventListener("click", (event) => {
-    if (!isMobileDevice()) return;
-    event.preventDefault();
-    if (threadsFallbackRoot) threadsFallbackRoot.hidden = true;
-    const timer = window.setTimeout(() => {
-      if (document.visibilityState === "visible") showThreadsFallback(permalink);
-    }, 1100);
-    window.addEventListener("pagehide", () => window.clearTimeout(timer), { once: true });
-    window.location.href = `barcelona://media?shortcode=${encodeURIComponent(shortcode)}`;
-  });
 }
 
 function formatViews(value) {
@@ -180,10 +150,6 @@ showMoreButton.addEventListener("click", () => {
   visibleCount = 10;
   showPosts(activePayload);
   showMoreButton.focus();
-});
-
-threadsFallbackClose?.addEventListener("click", () => {
-  if (threadsFallbackRoot) threadsFallbackRoot.hidden = true;
 });
 
 async function loadPosts() {

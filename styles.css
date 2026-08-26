@@ -145,13 +145,6 @@ h2 { font-size: clamp(34px, 4vw, 62px); }
 .threads-badge, .threads-footer-link { display: inline-flex; align-items: center; gap: 8px; color: var(--muted); font-size: 12px; }
 .threads-badge:hover, .threads-footer-link:hover { color: var(--paper); }
 .threads-glyph { width: 18px; height: 18px; fill: currentColor; flex: 0 0 auto; }
-.threads-app-fallback { position: fixed; z-index: 20; inset: 0; display: grid; place-items: end center; padding: 24px; background: rgba(0, 0, 0, .62); }
-.threads-app-fallback-card { width: min(100%, 460px); padding: 26px; border: 1px solid var(--line); background: #11110f; box-shadow: 0 18px 50px rgba(0, 0, 0, .45); }
-.threads-app-fallback-card h2 { margin-top: 8px; font-size: 28px; }
-.threads-app-fallback-card > p:not(.eyebrow) { margin: 12px 0 0; color: var(--muted); font-size: 13px; }
-.threads-app-fallback-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 22px; }
-.threads-app-fallback-close { display: block; margin: 18px 0 0 auto; border: 0; padding: 0; background: transparent; color: var(--muted); font: 12px "Noto Sans TC", sans-serif; cursor: pointer; }
-.threads-app-fallback-close:hover { color: var(--paper); }
 .post-loading { padding: 30px 0; color: var(--muted); }
 .show-more { display: inline-flex; align-items: center; gap: 40px; margin: 26px 0 0 auto; padding: 9px 12px; border: 1px solid var(--line); background: transparent; color: var(--paper); font: 12px "Noto Sans TC", sans-serif; cursor: pointer; }
 .show-more:hover { background: var(--paper); color: var(--ink); }
@@ -200,8 +193,6 @@ h2 { font-size: clamp(34px, 4vw, 62px); }
   .post-meta { grid-column: 2; flex-direction: row; align-items: center; text-align: left; gap: 18px; }
   .post-views { font-size: 31px; }
   .post-engagement { gap: 7px 12px; }
-  .threads-app-fallback { padding: 18px; }
-  .threads-app-fallback-card { width: 100%; padding: 22px 20px; }
   .show-more { margin-top: 18px; }
   .threads-overview { padding: 92px 0 104px; overflow: hidden; }
   .threads-overview > .section-index { padding-top: 0; writing-mode: horizontal-tb; margin-bottom: 8px; }
