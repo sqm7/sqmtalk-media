@@ -6,20 +6,44 @@ const accountStatusRoot = document.querySelector("#account-data-status");
 const accountSnapshotRoot = document.querySelector("#account-snapshot-at");
 let activePayload = null;
 let visibleCount = 3;
+const threadsWebFallbackPanel = document.querySelector("#threads-web-fallback-panel");
+const threadsWebFallbackLink = document.querySelector("#threads-web-fallback-link");
+const threadsWebFallbackClose = document.querySelector("#threads-web-fallback-close");
 
-function threadsUniversalUrl(permalink) {
+function threadsShortcode(permalink) {
   try {
-    const url = new URL(permalink);
-    url.hostname = "www.threads.net";
-    return url.href;
+    return new URL(permalink).pathname.match(/\/post\/([^/?#]+)/)?.[1] || null;
   } catch {
-    return permalink;
+    return null;
   }
 }
 
+function isMobileDevice() {
+  return /android|iphone|ipad|ipod/i.test(navigator.userAgent);
+}
+
+function showThreadsWebFallback(permalink) {
+  if (!threadsWebFallbackPanel || !threadsWebFallbackLink) return;
+  threadsWebFallbackLink.href = permalink;
+  threadsWebFallbackPanel.hidden = false;
+  threadsWebFallbackLink.focus();
+}
+
 function configureThreadsLink(link, permalink) {
-  link.href = threadsUniversalUrl(permalink);
+  link.href = permalink;
   link.rel = "noopener";
+  const shortcode = threadsShortcode(permalink);
+  if (!shortcode) return;
+  link.addEventListener("click", (event) => {
+    if (!isMobileDevice()) return;
+    event.preventDefault();
+    if (threadsWebFallbackPanel) threadsWebFallbackPanel.hidden = true;
+    const timer = window.setTimeout(() => {
+      if (document.visibilityState === "visible") showThreadsWebFallback(permalink);
+    }, 1000);
+    window.addEventListener("pagehide", () => window.clearTimeout(timer), { once: true });
+    window.location.href = `barcelona://media?shortcode=${encodeURIComponent(shortcode)}`;
+  });
 }
 
 function formatViews(value) {
@@ -150,6 +174,10 @@ showMoreButton.addEventListener("click", () => {
   visibleCount = 10;
   showPosts(activePayload);
   showMoreButton.focus();
+});
+
+threadsWebFallbackClose?.addEventListener("click", () => {
+  if (threadsWebFallbackPanel) threadsWebFallbackPanel.hidden = true;
 });
 
 async function loadPosts() {
