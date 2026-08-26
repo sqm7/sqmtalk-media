@@ -6,7 +6,6 @@ const accountStatusRoot = document.querySelector("#account-data-status");
 const accountSnapshotRoot = document.querySelector("#account-snapshot-at");
 let activePayload = null;
 let visibleCount = 3;
-let pendingThreadsLaunchTimer = null;
 
 function threadsShortcode(permalink) {
   try {
@@ -20,17 +19,8 @@ function isMobileDevice() {
   return /android|iphone|ipad|ipod/i.test(navigator.userAgent);
 }
 
-function threadsStoreUrl() {
-  return /android/i.test(navigator.userAgent)
-    ? "https://play.google.com/store/apps/details?id=com.instagram.barcelona"
-    : "https://apps.apple.com/app/threads-an-instagram-app/id6446901002";
-}
-
-function cancelThreadsStoreFallback() {
-  if (pendingThreadsLaunchTimer !== null) {
-    window.clearTimeout(pendingThreadsLaunchTimer);
-    pendingThreadsLaunchTimer = null;
-  }
+function threadsReplyIntent(shortcode) {
+  return `https://www.threads.com/intent/post?reply_post_shortcode=${encodeURIComponent(shortcode)}`;
 }
 
 function configureThreadsLink(link, permalink) {
@@ -38,15 +28,7 @@ function configureThreadsLink(link, permalink) {
   link.rel = "noopener";
   const shortcode = threadsShortcode(permalink);
   if (!shortcode || !isMobileDevice()) return;
-  link.href = `barcelona://media?shortcode=${encodeURIComponent(shortcode)}`;
-  link.addEventListener("click", (event) => {
-    if (event.defaultPrevented) return;
-    cancelThreadsStoreFallback();
-    pendingThreadsLaunchTimer = window.setTimeout(() => {
-      pendingThreadsLaunchTimer = null;
-      if (document.visibilityState === "visible") window.location.assign(threadsStoreUrl());
-    }, 1200);
-  });
+  link.href = threadsReplyIntent(shortcode);
 }
 
 function formatViews(value) {
@@ -176,12 +158,6 @@ showMoreButton.addEventListener("click", () => {
   visibleCount = 10;
   showPosts(activePayload);
   showMoreButton.focus();
-});
-
-window.addEventListener("pagehide", cancelThreadsStoreFallback);
-window.addEventListener("pageshow", cancelThreadsStoreFallback);
-document.addEventListener("visibilitychange", () => {
-  if (document.visibilityState === "hidden") cancelThreadsStoreFallback();
 });
 
 async function loadPosts() {
