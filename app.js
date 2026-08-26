@@ -9,6 +9,7 @@ let visibleCount = 3;
 const threadsWebFallbackPanel = document.querySelector("#threads-web-fallback-panel");
 const threadsWebFallbackLink = document.querySelector("#threads-web-fallback-link");
 const threadsWebFallbackClose = document.querySelector("#threads-web-fallback-close");
+let pendingThreadsLaunchTimer = null;
 
 function threadsShortcode(permalink) {
   try {
@@ -39,6 +40,14 @@ function showThreadsWebFallback(permalink) {
   threadsWebFallbackLink.focus();
 }
 
+function resetThreadsWebFallback() {
+  if (pendingThreadsLaunchTimer !== null) {
+    window.clearTimeout(pendingThreadsLaunchTimer);
+    pendingThreadsLaunchTimer = null;
+  }
+  if (threadsWebFallbackPanel) threadsWebFallbackPanel.hidden = true;
+}
+
 function configureThreadsLink(link, permalink) {
   link.href = permalink;
   link.rel = "noopener";
@@ -47,11 +56,11 @@ function configureThreadsLink(link, permalink) {
   link.addEventListener("click", (event) => {
     if (!isMobileDevice()) return;
     event.preventDefault();
-    if (threadsWebFallbackPanel) threadsWebFallbackPanel.hidden = true;
-    const timer = window.setTimeout(() => {
+    resetThreadsWebFallback();
+    pendingThreadsLaunchTimer = window.setTimeout(() => {
+      pendingThreadsLaunchTimer = null;
       if (document.visibilityState === "visible") showThreadsWebFallback(permalink);
     }, 1000);
-    window.addEventListener("pagehide", () => window.clearTimeout(timer), { once: true });
     window.location.href = `barcelona://media?shortcode=${encodeURIComponent(shortcode)}`;
   });
 }
@@ -122,10 +131,9 @@ function showPosts(payload, fallback = false) {
     rank.className = "post-rank";
     rank.textContent = `0${post.rank || index + 1}`.slice(-2);
     const copy = document.createElement("div");
-    const link = document.createElement("a");
-    link.className = "post-title";
-    configureThreadsLink(link, post.permalink);
-    link.textContent = withoutFullStops(post.title) || "查看 Threads 貼文";
+    const title = document.createElement("h3");
+    title.className = "post-title";
+    title.textContent = withoutFullStops(post.title) || "查看 Threads 貼文";
     const excerpt = document.createElement("p");
     excerpt.className = "post-excerpt";
     excerpt.textContent = withoutFullStops(post.excerpt);
@@ -140,9 +148,9 @@ function showPosts(payload, fallback = false) {
       const engagement = document.createElement("div");
       engagement.className = "post-engagement";
       metricEntries.forEach(([icon, label, value]) => engagement.append(metricChip(icon, label, value)));
-      copy.append(link, excerpt, engagement);
+      copy.append(title, excerpt, engagement);
     } else {
-      copy.append(link, excerpt);
+      copy.append(title, excerpt);
     }
     const meta = document.createElement("div");
     meta.className = "post-meta";
@@ -187,7 +195,13 @@ showMoreButton.addEventListener("click", () => {
 });
 
 threadsWebFallbackClose?.addEventListener("click", () => {
-  if (threadsWebFallbackPanel) threadsWebFallbackPanel.hidden = true;
+  resetThreadsWebFallback();
+});
+
+window.addEventListener("pagehide", resetThreadsWebFallback);
+window.addEventListener("pageshow", resetThreadsWebFallback);
+document.addEventListener("visibilitychange", () => {
+  if (document.visibilityState === "hidden") resetThreadsWebFallback();
 });
 
 async function loadPosts() {
