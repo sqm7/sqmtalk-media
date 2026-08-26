@@ -76,8 +76,7 @@ function showPosts(payload, fallback = false) {
     const link = document.createElement("a");
     link.className = "post-title";
     link.href = post.permalink;
-    link.target = "_blank";
-    link.rel = "noreferrer";
+    link.rel = "noopener";
     link.textContent = withoutFullStops(post.title) || "查看 Threads 貼文";
     const excerpt = document.createElement("p");
     excerpt.className = "post-excerpt";
@@ -108,8 +107,7 @@ function showPosts(payload, fallback = false) {
     const threads = document.createElement("a");
     threads.className = "threads-badge";
     threads.href = post.permalink;
-    threads.target = "_blank";
-    threads.rel = "noreferrer";
+    threads.rel = "noopener";
     const threadsIcon = document.createElementNS("http://www.w3.org/2000/svg", "svg");
     threadsIcon.className = "threads-glyph";
     threadsIcon.setAttribute("viewBox", "0 0 24 24");
@@ -125,9 +123,14 @@ function showPosts(payload, fallback = false) {
     postsRoot.append(item);
   });
   showMoreButton.hidden = fallback || allPosts.length <= 3 || visibleCount >= allPosts.length;
-  if (fallback) statusRoot.textContent = "作品集快照（資料暫時更新中）";
-  else if (payload?.meta?.stale) statusRoot.textContent = "資料更新中（顯示最近一次觀測）";
-  else statusRoot.textContent = "依目前已同步內容的瀏覽數排序";
+  if (fallback) {
+    statusRoot.hidden = false;
+    statusRoot.textContent = "作品集快照（資料暫時更新中）";
+  } else if (payload?.meta?.stale) {
+    statusRoot.hidden = false;
+    statusRoot.textContent = "資料更新中（顯示最近一次觀測）";
+  }
+  else statusRoot.hidden = true;
 }
 
 showMoreButton.addEventListener("click", () => {
