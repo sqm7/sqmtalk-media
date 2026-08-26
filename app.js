@@ -6,6 +6,51 @@ const accountStatusRoot = document.querySelector("#account-data-status");
 const accountSnapshotRoot = document.querySelector("#account-snapshot-at");
 let activePayload = null;
 let visibleCount = 3;
+const threadsFallbackRoot = document.querySelector("#threads-app-fallback");
+const threadsWebFallback = document.querySelector("#threads-web-fallback");
+const threadsStoreFallback = document.querySelector("#threads-store-fallback");
+const threadsFallbackClose = document.querySelector("#threads-app-fallback-close");
+
+function threadsShortcode(permalink) {
+  try {
+    return new URL(permalink).pathname.match(/\/post\/([^/?#]+)/)?.[1] || null;
+  } catch {
+    return null;
+  }
+}
+
+function isMobileDevice() {
+  return /android|iphone|ipad|ipod/i.test(navigator.userAgent);
+}
+
+function showThreadsFallback(permalink) {
+  if (!threadsFallbackRoot || !threadsWebFallback) return;
+  threadsWebFallback.href = permalink;
+  if (threadsStoreFallback) {
+    threadsStoreFallback.href = /android/i.test(navigator.userAgent)
+      ? "https://play.google.com/store/apps/details?id=com.instagram.barcelona"
+      : "https://apps.apple.com/app/threads-an-instagram-app/id6446901002";
+  }
+  threadsFallbackRoot.hidden = false;
+  threadsWebFallback.focus();
+}
+
+function configureThreadsLink(link, permalink) {
+  link.href = permalink;
+  link.rel = "noopener";
+  const shortcode = threadsShortcode(permalink);
+  if (!shortcode) return;
+  link.addEventListener("click", (event) => {
+    if (!isMobileDevice()) return;
+    event.preventDefault();
+    if (threadsFallbackRoot) threadsFallbackRoot.hidden = true;
+    const timer = window.setTimeout(() => {
+      if (document.visibilityState === "visible") showThreadsFallback(permalink);
+    }, 1100);
+    window.addEventListener("pagehide", () => window.clearTimeout(timer), { once: true });
+    window.location.href = `barcelona://media?shortcode=${encodeURIComponent(shortcode)}`;
+  });
+}
 
 function formatViews(value) {
   return new Intl.NumberFormat("zh-TW").format(Number(value) || 0);
@@ -75,8 +120,7 @@ function showPosts(payload, fallback = false) {
     const copy = document.createElement("div");
     const link = document.createElement("a");
     link.className = "post-title";
-    link.href = post.permalink;
-    link.rel = "noopener";
+    configureThreadsLink(link, post.permalink);
     link.textContent = withoutFullStops(post.title) || "查看 Threads 貼文";
     const excerpt = document.createElement("p");
     excerpt.className = "post-excerpt";
@@ -106,8 +150,7 @@ function showPosts(payload, fallback = false) {
     views.append(viewsUnit);
     const threads = document.createElement("a");
     threads.className = "threads-badge";
-    threads.href = post.permalink;
-    threads.rel = "noopener";
+    configureThreadsLink(threads, post.permalink);
     const threadsIcon = document.createElementNS("http://www.w3.org/2000/svg", "svg");
     threadsIcon.className = "threads-glyph";
     threadsIcon.setAttribute("viewBox", "0 0 24 24");
@@ -137,6 +180,10 @@ showMoreButton.addEventListener("click", () => {
   visibleCount = 10;
   showPosts(activePayload);
   showMoreButton.focus();
+});
+
+threadsFallbackClose?.addEventListener("click", () => {
+  if (threadsFallbackRoot) threadsFallbackRoot.hidden = true;
 });
 
 async function loadPosts() {
