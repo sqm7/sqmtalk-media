@@ -7,28 +7,9 @@ const accountSnapshotRoot = document.querySelector("#account-snapshot-at");
 let activePayload = null;
 let visibleCount = 3;
 
-function threadsShortcode(permalink) {
-  try {
-    return new URL(permalink).pathname.match(/\/post\/([^/?#]+)/)?.[1] || null;
-  } catch {
-    return null;
-  }
-}
-
-function isMobileDevice() {
-  return /android|iphone|ipad|ipod/i.test(navigator.userAgent);
-}
-
-function threadsReplyIntent(shortcode) {
-  return `https://www.threads.com/intent/post?reply_post_shortcode=${encodeURIComponent(shortcode)}`;
-}
-
 function configureThreadsLink(link, permalink) {
   link.href = permalink;
   link.rel = "noopener";
-  const shortcode = threadsShortcode(permalink);
-  if (!shortcode || !isMobileDevice()) return;
-  link.href = threadsReplyIntent(shortcode);
 }
 
 function formatViews(value) {
