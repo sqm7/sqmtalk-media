@@ -22,9 +22,19 @@ function isMobileDevice() {
   return /android|iphone|ipad|ipod/i.test(navigator.userAgent);
 }
 
+function threadsExternalBrowserUrl(permalink) {
+  if (!/iphone|ipad|ipod/i.test(navigator.userAgent)) return permalink;
+  try {
+    const url = new URL(permalink);
+    return `x-safari-https://${url.host}${url.pathname}${url.search}${url.hash}`;
+  } catch {
+    return permalink;
+  }
+}
+
 function showThreadsWebFallback(permalink) {
   if (!threadsWebFallbackPanel || !threadsWebFallbackLink) return;
-  threadsWebFallbackLink.href = permalink;
+  threadsWebFallbackLink.href = threadsExternalBrowserUrl(permalink);
   threadsWebFallbackPanel.hidden = false;
   threadsWebFallbackLink.focus();
 }
