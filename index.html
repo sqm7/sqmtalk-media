@@ -100,14 +100,24 @@
       <section class="work shell" id="work" aria-labelledby="work-title">
         <div class="section-heading">
           <div>
-            <p class="eyebrow">SELECTED WORK</p>
-            <h2 id="work-title">目前熱門貼文</h2>
+            <p class="eyebrow">THREADS INSIGHT</p>
+            <h2 id="work-title">Threads 洞察</h2>
           </div>
           <p id="data-status" class="data-status" aria-live="polite">讀取目前同步內容中</p>
         </div>
-        <ol class="post-list" id="post-list" aria-live="polite">
-          <li class="post-loading">正在整理作品集</li>
-        </ol>
+        <div class="ranking-controls" aria-label="Threads 排行控制">
+          <div>
+            <p class="control-label">排行池</p>
+            <div class="pool-switch" id="pool-switch" role="group" aria-label="選擇排行池"></div>
+          </div>
+          <div>
+            <p class="control-label">排序方式</p>
+            <div class="metric-switch" id="metric-switch" role="group" aria-label="選擇排序方式"></div>
+          </div>
+        </div>
+        <div class="ranking-pools" id="ranking-pools" aria-live="polite">
+          <p class="post-loading">正在整理排行池</p>
+        </div>
         <button class="show-more" id="show-more" type="button" hidden>看第 4 名到第 10 名 <span aria-hidden="true">↓</span></button>
       </section>
 
