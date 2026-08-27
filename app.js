@@ -61,6 +61,10 @@ function showAccountSummary(totals, fallback = false) {
     const target = document.querySelector(`[data-metric="${key}"]`);
     if (!target) return;
     const value = accountData?.[key];
+    if (key === "postsCount") {
+      target.textContent = value === null || value === undefined ? "—" : formatViews(value);
+      return;
+    }
     target.textContent = value === null || value === undefined ? "—" : formatViews(value);
   });
   if (accountSnapshotRoot) accountSnapshotRoot.textContent = formatSnapshotDate(accountData?.latestSnapshotAt);
