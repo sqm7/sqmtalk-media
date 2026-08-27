@@ -16,7 +16,7 @@ const METRICS = [
 ];
 let activePayload = null;
 let activeMetric = "views";
-let activePool = "all-groups";
+let activePool = "all";
 let visibleCount = 3;
 
 function configureThreadsLink(link, permalink) {
@@ -111,7 +111,7 @@ function renderMetricSwitch() {
 function renderPoolSwitch(groups) {
   if (!poolSwitchRoot) return;
   poolSwitchRoot.replaceChildren();
-  const choices = [{ slug: "all-groups", label: "全部排行池" }, ...groups.map((group) => ({ slug: group.slug, label: group.displayName || group.name }))];
+  const choices = groups.map((group) => ({ slug: group.slug, label: group.displayName || group.name }));
   choices.forEach((choice) => {
     const button = document.createElement("button");
     button.type = "button";
@@ -183,7 +183,7 @@ function showPosts(payload, fallback = false) {
   activePayload = payload;
   const groups = groupsFromPayload(payload);
   renderPoolSwitch(groups);
-  const visibleGroups = activePool === "all-groups" ? groups : groups.filter((group) => group.slug === activePool);
+  const visibleGroups = groups.filter((group) => group.slug === activePool);
   postsRoot.replaceChildren();
   if (!visibleGroups.length) {
     postsRoot.textContent = "目前沒有可顯示的排行池";
