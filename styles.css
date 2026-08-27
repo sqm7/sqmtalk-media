@@ -210,20 +210,16 @@ h2 { font-size: clamp(34px, 4vw, 62px); }
 .collaboration-detail { grid-column: 2; grid-row: 1; max-width: 360px; padding-top: 94px; }
 .contact-link { display: inline-flex; align-items: center; justify-content: space-between; gap: 70px; min-width: 230px; margin-top: 26px; padding: 13px 16px; border: 1px solid var(--paper); background: var(--paper); color: var(--ink); transition: background .2s, color .2s; }
 .contact-link:hover { background: transparent; color: var(--paper); }
-.collaboration-visual { grid-column: 2 / -1; margin-top: 56px; padding-top: 25px; border-top: 1px solid var(--line); }
-.collaboration-image { position: relative; min-height: 372px; overflow: hidden; background: linear-gradient(90deg, rgba(0, 0, 0, .84), rgba(0, 0, 0, .2)), url("./assets/hero/greater-taipei-taoyuan-network-v1.png") center / cover; }
+.collaboration-visual { grid-column: 2 / -1; margin-top: 64px; padding-top: 25px; border-top: 1px solid var(--line); }
+.collaboration-image { position: relative; min-height: 420px; overflow: hidden; background: #090908; }
 .collaboration-image::after { content: ""; position: absolute; inset: 18px; border: 1px solid rgba(240, 236, 227, .2); pointer-events: none; }
-.collaboration-image-wash { position: absolute; inset: 0; background: linear-gradient(90deg, rgba(0, 0, 0, .9) 0%, rgba(0, 0, 0, .48) 45%, rgba(105, 46, 35, .16) 100%); }
-.collaboration-image-label, .collaboration-image-note { position: absolute; z-index: 1; color: #c5c1ba; font-size: 10px; letter-spacing: .17em; }
-.collaboration-image-label { top: 31px; left: 32px; }
-.collaboration-image-note { right: 32px; bottom: 31px; color: #a39f98; }
-.collaboration-image-pin { position: absolute; z-index: 1; top: 50%; left: 57%; display: grid; place-items: center; width: 52px; height: 52px; border: 1px solid rgba(240, 236, 227, .82); border-radius: 50%; color: var(--paper); font-size: 11px; transform: translate(-50%, -50%); }
-.collaboration-image-pin::before, .collaboration-image-pin::after { content: ""; position: absolute; border: 1px solid rgba(240, 236, 227, .42); border-radius: 50%; }
-.collaboration-image-pin::before { inset: -15px; }
-.collaboration-image-pin::after { inset: -30px; opacity: .55; }
+.collaboration-photo { position: absolute; inset: 0 auto 0 0; width: 54%; background: url("./assets/hero/project-fit-editorial.png") 58% center / cover no-repeat; filter: grayscale(.72) contrast(1.12); opacity: .92; }
+.collaboration-map { position: absolute; inset: 0 0 0 auto; width: 58%; display: grid; place-items: center; padding: 48px 32px 32px; border-left: 1px solid rgba(240, 236, 227, .14); background: #0d0d0c; }
+.collaboration-map img { display: block; width: 100%; height: 100%; object-fit: contain; opacity: .82; filter: grayscale(1) contrast(1.18); }
+.collaboration-image-wash { position: absolute; inset: 0; background: linear-gradient(90deg, rgba(0, 0, 0, .48) 0%, rgba(0, 0, 0, .08) 45%, rgba(0, 0, 0, .34) 100%); pointer-events: none; }
+.collaboration-image-region { position: absolute; z-index: 1; top: 31px; right: 32px; color: #c5c1ba; font-size: 10px; letter-spacing: .17em; }
 .collaboration-image-statement { position: absolute; z-index: 1; bottom: 37px; left: 32px; max-width: 390px; }
 .collaboration-image-statement strong { color: var(--paper); font: 500 clamp(28px, 3.2vw, 50px)/1.18 "Noto Serif TC", serif; letter-spacing: -.045em; }
-.collaboration-caption { justify-content: flex-end; }
 
 .site-footer { padding: 34px 0 42px; display: grid; grid-template-columns: 1fr 1.3fr auto; column-gap: 42px; row-gap: 26px; align-items: start; color: var(--muted); font-size: 12px; }
 .site-footer .brand { color: var(--paper); }
@@ -309,12 +305,12 @@ h2 { font-size: clamp(34px, 4vw, 62px); }
   .collaboration-copy h2 { font-size: clamp(38px, 10.3vw, 48px); }
   .collaboration-detail { max-width: none; padding-top: 0; }
   .collaboration-visual { margin-top: 43px; }
-  .collaboration-image { min-height: 316px; }
+  .collaboration-image { min-height: 470px; }
   .collaboration-image::after { inset: 12px; }
-  .collaboration-image-label { top: 24px; left: 24px; }
-  .collaboration-image-note { right: 24px; bottom: 24px; font-size: 9px; }
-  .collaboration-image-pin { left: 61%; }
-  .collaboration-image-statement { bottom: 28px; left: 24px; max-width: 280px; }
+  .collaboration-photo { inset: 0 0 auto; width: 100%; height: 54%; background-position: center; }
+  .collaboration-map { inset: auto 0 0; width: 100%; height: 54%; padding: 28px 20px 20px; border-top: 1px solid rgba(240, 236, 227, .14); border-left: 0; }
+  .collaboration-image-region { top: 23px; right: 24px; font-size: 9px; }
+  .collaboration-image-statement { bottom: 51%; left: 24px; max-width: 260px; }
   .collaboration-image-statement strong { font-size: 30px; }
   .site-footer { grid-template-columns: 1fr; }
   .footer-links { justify-content: flex-start; flex-wrap: wrap; }
