@@ -129,6 +129,7 @@ h2 { font-size: clamp(34px, 4vw, 62px); }
 .work { border-top: 1px solid var(--line); padding: 100px 0 0; }
 .section-heading { display: flex; align-items: end; justify-content: space-between; gap: 24px; padding-bottom: 40px; }
 .section-heading h2 { margin-top: 10px; }
+.work-deck { max-width: 30em; margin: 16px 0 0; color: var(--muted); font-family: "Noto Serif TC", serif; font-size: 15px; line-height: 1.8; }
 .data-status { margin: 0; max-width: 220px; text-align: right; color: var(--muted); font-size: 11px; }
 .ranking-controls { display: grid; grid-template-columns: 1.1fr .9fr; gap: 26px; padding: 22px 0 28px; border-top: 1px solid var(--line-soft); border-bottom: 1px solid var(--line); }
 .control-label { margin: 0 0 10px; color: var(--muted); font-size: 10px; letter-spacing: .16em; }
@@ -163,7 +164,7 @@ h2 { font-size: clamp(34px, 4vw, 62px); }
 .show-more:hover { background: var(--paper); color: var(--ink); }
 
 .about, .collaboration { position: relative; display: grid; gap: 32px; border-bottom: 1px solid var(--line); }
-.about { grid-template-columns: 64px minmax(0, 1.08fr) minmax(360px, .92fr); align-items: start; padding: 126px 0 126px; overflow: hidden; }
+.about { grid-template-columns: 64px minmax(0, 1.08fr) minmax(360px, .92fr); align-items: start; padding: 112px 0 114px; overflow: hidden; }
 .about::before { content: "02"; position: absolute; right: 7%; bottom: -74px; color: rgba(240, 236, 227, .035); font: 600 300px/1 "Noto Serif TC", serif; letter-spacing: -.08em; pointer-events: none; }
 .about .section-index, .collaboration .section-index { padding-top: 8px; writing-mode: vertical-rl; letter-spacing: .28em; }
 .about-copy { grid-column: 2; max-width: 740px; padding-top: 2px; }
@@ -173,8 +174,8 @@ h2 { font-size: clamp(34px, 4vw, 62px); }
 .about-detail { grid-column: 3; align-self: end; justify-self: end; max-width: 360px; padding: 0 0 6px 28px; border-left: 1px solid var(--line); }
 .about-detail p, .collaboration-detail p { margin: 0; }
 .detail-note { display: block; margin-top: 22px; color: #77746e; font-size: 11px; line-height: 1.7; letter-spacing: .08em; }
-.about-visual { grid-column: 2 / -1; margin-top: 70px; }
-.about-visual-frame { position: relative; min-height: 410px; overflow: hidden; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line-soft); background: #0a0a09; }
+.about-visual { grid-column: 2 / -1; margin-top: 58px; }
+.about-visual-frame { position: relative; min-height: 372px; overflow: hidden; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line-soft); background: #0a0a09; }
 .about-visual-frame img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: right 46%; opacity: .46; filter: grayscale(1) contrast(1.2); }
 .about-visual-wash { position: absolute; inset: 0; background: linear-gradient(90deg, rgba(0, 0, 0, .98) 0%, rgba(0, 0, 0, .68) 42%, rgba(0, 0, 0, .2) 100%); }
 .about-visual-top { position: absolute; z-index: 1; top: 24px; right: 26px; left: 26px; display: flex; justify-content: space-between; gap: 20px; color: var(--muted); font-size: 10px; letter-spacing: .15em; }
@@ -187,30 +188,30 @@ h2 { font-size: clamp(34px, 4vw, 62px); }
 .about-visual-callout strong { color: var(--paper); font: 500 clamp(24px, 2.6vw, 40px)/1.25 "Noto Serif TC", serif; letter-spacing: -.04em; }
 .about-visual-caption, .collaboration-caption { display: flex; align-items: center; gap: 16px; margin-top: 14px; color: #8f8b84; font-size: 10px; letter-spacing: .11em; }
 .about-visual-caption i, .collaboration-caption i { display: block; width: 48px; height: 1px; background: var(--line); }
-.translation-bridge { display: grid; grid-template-columns: 64px minmax(0, 1fr); column-gap: 32px; padding: 106px 0 114px; border-bottom: 1px solid var(--line); }
+.translation-bridge { display: grid; grid-template-columns: 64px minmax(0, 1fr); column-gap: 32px; padding: 88px 0 96px; border-bottom: 1px solid var(--line); }
 .bridge-topline { grid-column: 1; display: flex; flex-direction: column; gap: 16px; align-items: flex-start; }
 .bridge-topline .section-index { padding-top: 5px; color: #77746e; }
 .bridge-copy { grid-column: 2; max-width: 920px; }
 .bridge-copy .eyebrow { margin-bottom: 20px; }
-.bridge-copy h2 { max-width: 17em; font-size: clamp(32px, 4vw, 58px); line-height: 1.25; }
-.bridge-axis { grid-column: 2; display: grid; grid-template-columns: minmax(0, 1fr) minmax(96px, .2fr) minmax(0, 1fr); align-items: stretch; margin-top: 68px; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line-soft); }
-.axis-side { padding: 26px 28px 28px 0; }
-.axis-side-right { padding: 26px 0 28px 28px; border-left: 1px solid var(--line-soft); }
+.bridge-copy h2 { max-width: 12em; font-size: clamp(32px, 4vw, 58px); line-height: 1.25; }
+.bridge-axis { grid-column: 2; display: grid; grid-template-columns: minmax(0, 1fr) minmax(96px, .2fr) minmax(0, 1fr); align-items: stretch; margin-top: 48px; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line-soft); }
+.axis-side { padding: 22px 28px 25px 0; }
+.axis-side-right { padding: 22px 0 25px 28px; border-left: 1px solid var(--line-soft); }
 .axis-label { display: block; color: var(--muted); font-size: 10px; letter-spacing: .17em; }
-.axis-side strong { display: block; margin-top: 34px; color: var(--paper); font: 500 clamp(24px, 2.5vw, 38px)/1.25 "Noto Serif TC", serif; letter-spacing: -.04em; }
+.axis-side strong { display: block; margin-top: 26px; color: var(--paper); font: 500 clamp(24px, 2.5vw, 38px)/1.25 "Noto Serif TC", serif; letter-spacing: -.04em; }
 .axis-side p { max-width: 30em; margin: 17px 0 0; color: #99958e; font-size: 12px; line-height: 1.85; }
 .axis-core { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 11px; color: #8f8b84; }
 .axis-core span { font-size: 24px; line-height: 1; }
 .axis-core small { font-size: 9px; letter-spacing: .18em; }
-.collaboration { grid-template-columns: 64px minmax(300px, .65fr) minmax(0, 1.35fr); align-items: start; padding: 132px 0 150px; overflow: hidden; }
+.collaboration { grid-template-columns: 64px minmax(300px, .65fr) minmax(0, 1.35fr); align-items: start; padding: 112px 0 126px; overflow: hidden; }
 .collaboration::before { content: "03"; position: absolute; right: -18px; bottom: -105px; color: rgba(240, 236, 227, .035); font: 600 300px/1 "Noto Serif TC", serif; letter-spacing: -.08em; pointer-events: none; }
 .collaboration-copy { grid-column: 3; max-width: 760px; }
 .collaboration-copy h2 { font-size: clamp(42px, 5vw, 76px); line-height: 1.13; }
 .collaboration-detail { grid-column: 2; grid-row: 1; max-width: 360px; padding-top: 94px; }
 .contact-link { display: inline-flex; align-items: center; justify-content: space-between; gap: 70px; min-width: 230px; margin-top: 26px; padding: 13px 16px; border: 1px solid var(--paper); background: var(--paper); color: var(--ink); transition: background .2s, color .2s; }
 .contact-link:hover { background: transparent; color: var(--paper); }
-.collaboration-visual { grid-column: 2 / -1; margin-top: 70px; padding-top: 27px; border-top: 1px solid var(--line); }
-.collaboration-image { position: relative; min-height: 430px; overflow: hidden; background: linear-gradient(90deg, rgba(0, 0, 0, .84), rgba(0, 0, 0, .2)), url("./assets/hero/greater-taipei-taoyuan-network-v1.png") center / cover; }
+.collaboration-visual { grid-column: 2 / -1; margin-top: 56px; padding-top: 25px; border-top: 1px solid var(--line); }
+.collaboration-image { position: relative; min-height: 372px; overflow: hidden; background: linear-gradient(90deg, rgba(0, 0, 0, .84), rgba(0, 0, 0, .2)), url("./assets/hero/greater-taipei-taoyuan-network-v1.png") center / cover; }
 .collaboration-image::after { content: ""; position: absolute; inset: 18px; border: 1px solid rgba(240, 236, 227, .2); pointer-events: none; }
 .collaboration-image-wash { position: absolute; inset: 0; background: linear-gradient(90deg, rgba(0, 0, 0, .9) 0%, rgba(0, 0, 0, .48) 45%, rgba(105, 46, 35, .16) 100%); }
 .collaboration-image-label, .collaboration-image-note { position: absolute; z-index: 1; color: #c5c1ba; font-size: 10px; letter-spacing: .17em; }
@@ -286,7 +287,7 @@ h2 { font-size: clamp(34px, 4vw, 62px); }
   .about-detail { justify-self: auto; max-width: none; padding: 0; border-left: 0; }
   .about-detail p { font-size: 17px; }
   .about-visual { margin-top: 25px; }
-  .about-visual-frame { min-height: 340px; }
+  .about-visual-frame { min-height: 318px; }
   .about-visual-top { right: 18px; left: 18px; flex-direction: column; gap: 7px; }
   .about-visual-mark { right: 7%; }
   .about-visual-mark strong { font-size: clamp(145px, 44vw, 210px); }
@@ -308,7 +309,7 @@ h2 { font-size: clamp(34px, 4vw, 62px); }
   .collaboration-copy h2 { font-size: clamp(38px, 10.3vw, 48px); }
   .collaboration-detail { max-width: none; padding-top: 0; }
   .collaboration-visual { margin-top: 43px; }
-  .collaboration-image { min-height: 350px; }
+  .collaboration-image { min-height: 316px; }
   .collaboration-image::after { inset: 12px; }
   .collaboration-image-label { top: 24px; left: 24px; }
   .collaboration-image-note { right: 24px; bottom: 24px; font-size: 9px; }
