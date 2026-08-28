@@ -52,7 +52,7 @@ h2 { font-size: clamp(34px, 4vw, 62px); }
 .button-primary:hover { background: transparent; color: var(--paper); }
 .button-quiet:hover { background: var(--paper); color: var(--ink); }
 
-.threads-overview { position: relative; display: grid; grid-template-columns: minmax(360px, .9fr) minmax(400px, 1.1fr); gap: 48px; align-items: start; border-bottom: 1px solid var(--line); padding: 140px 0 150px; }
+.threads-overview { position: relative; display: grid; grid-template-columns: minmax(360px, .9fr) minmax(400px, 1.1fr); gap: 48px; align-items: start; border-bottom: 1px solid var(--line); padding: 96px 0 88px; }
 .threads-overview-copy { grid-column: 1; max-width: 600px; }
 .threads-overview-copy .eyebrow { margin-bottom: 20px; }
 .threads-overview-copy h2 { font-size: clamp(40px, 4.5vw, 70px); }
@@ -189,7 +189,7 @@ h2 { font-size: clamp(34px, 4vw, 62px); }
   .post-views { font-size: 31px; }
   .post-engagement { gap: 7px 12px; }
   .show-more { margin-top: 18px; }
-  .threads-overview { padding: 92px 0 104px; overflow: hidden; }
+  .threads-overview { padding: 64px 0 72px; overflow: hidden; }
   .threads-overview-copy, .account-overview, .phone-stage { grid-column: auto; grid-row: auto; }
   .threads-overview-copy h2, .about-copy h2, .collaboration > div:nth-child(2) h2 { font-size: clamp(38px, 10.3vw, 46px); line-height: 1.16; letter-spacing: -.035em; }
   .account-overview, .account-aside { width: 100%; padding: 20px 0; }
