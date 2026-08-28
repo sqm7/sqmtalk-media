@@ -125,7 +125,7 @@ h2 { font-size: clamp(34px, 4vw, 62px); }
 .phone-home-indicator { position: absolute; z-index: 2; bottom: 14px; left: 50%; width: 47px; height: 3px; border-radius: 99px; background: var(--paper); transform: translateX(-50%); }
 .phone-caption { margin: 23px 0 0; color: var(--muted); font-size: 10px; letter-spacing: .16em; }
 
-.work { border-top: 1px solid var(--line); padding: 100px 0 0; }
+.work { border-top: 1px solid var(--line); padding: 40px 0 0; }
 .ranking-controls { display: grid; grid-template-columns: 1.1fr .9fr; gap: 26px; padding: 22px 0 28px; border-top: 1px solid var(--line-soft); border-bottom: 1px solid var(--line); }
 .control-label { margin: 0 0 10px; color: var(--muted); font-size: 10px; letter-spacing: .16em; }
 .pool-switch, .metric-switch { display: flex; flex-wrap: wrap; gap: 8px; }
@@ -177,7 +177,7 @@ h2 { font-size: clamp(34px, 4vw, 62px); }
   .hero-topline { margin-bottom: 24px; }
   .hero-grid, .about, .collaboration, .threads-overview { grid-template-columns: 1fr; gap: 25px; }
   .hero-copy { width: 100%; padding: 0 0 35px; }
-  .work { padding-top: 80px; }
+  .work { padding-top: 32px; }
   .ranking-controls { grid-template-columns: 1fr; gap: 19px; padding: 18px 0 22px; }
   .ranking-pools { margin-top: 32px; }
   .ranking-pool { margin-bottom: 56px; }
