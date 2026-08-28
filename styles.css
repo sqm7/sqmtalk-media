@@ -126,7 +126,7 @@ h2 { font-size: clamp(34px, 4vw, 62px); }
 .phone-caption { margin: 23px 0 0; color: var(--muted); font-size: 10px; letter-spacing: .16em; }
 
 .work { border-top: 1px solid var(--line); padding: 40px 0 0; }
-.ranking-controls { display: grid; grid-template-columns: 1.1fr .9fr; gap: 26px; padding: 22px 0 28px; border-top: 1px solid var(--line-soft); border-bottom: 1px solid var(--line); }
+.ranking-controls { display: grid; grid-template-columns: 1.1fr .9fr; gap: 26px; padding: 22px 0 28px; border-bottom: 1px solid var(--line); }
 .control-label { margin: 0 0 10px; color: var(--muted); font-size: 10px; letter-spacing: .16em; }
 .pool-switch, .metric-switch { display: flex; flex-wrap: wrap; gap: 8px; }
 .switch-button { appearance: none; border: 1px solid var(--line-soft); padding: 8px 11px; background: transparent; color: var(--muted); font: 12px "Noto Sans TC", sans-serif; cursor: pointer; transition: border-color .2s, background .2s, color .2s; }
