@@ -36,7 +36,6 @@ nav a:hover, .tool-link:hover, .footer-links a:hover { color: var(--paper); }
 .hero::after { content: ""; position: absolute; z-index: 1; inset: 0; background: linear-gradient(90deg, #000 0%, rgba(0, 0, 0, .98) 30%, rgba(0, 0, 0, .52) 55%, rgba(0, 0, 0, .04) 82%); pointer-events: none; }
 .eyebrow, .issue { margin: 0; color: var(--muted); font-size: 11px; letter-spacing: .18em; }
 .hero-topline { position: relative; z-index: 2; display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }
-.hero-edition { margin: 0; color: var(--muted); font-size: 11px; letter-spacing: .15em; }
 .hero-grid { display: block; }
 .hero-copy { position: relative; z-index: 2; width: min(100%, 850px); padding: 30px 0 28px; }
 .issue { margin: 0 0 20px; }
