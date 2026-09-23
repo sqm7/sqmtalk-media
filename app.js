@@ -198,6 +198,7 @@ showMoreButton.addEventListener("click", async () => {
   try {
     await loadPosts({ append: true });
     visibleCount = Math.min(visibleCount + PAGE_SIZE, activeRows.length);
+    showPosts(activePayload);
   } finally {
     loadingMore = false;
     showMoreButton.disabled = false;
