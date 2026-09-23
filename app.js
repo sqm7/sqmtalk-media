@@ -207,7 +207,7 @@ showMoreButton.addEventListener("click", async () => {
 
 async function loadPosts({ append = false } = {}) {
   const controller = new AbortController();
-  const timer = window.setTimeout(() => controller.abort(), 6000);
+  const timer = window.setTimeout(() => controller.abort(), 15000);
   try {
     const params = new URLSearchParams({ metric: activeMetric, window: activeWindow, offset: String(append ? activeRows.length : 0), limit: String(PAGE_SIZE) });
     if (knownGroups.length) params.set("pool", activePool);
