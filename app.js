@@ -2,45 +2,31 @@ const endpointBase = "https://zxbmbbfrzbtuueysicoc.supabase.co/functions/v1/sqm-
 const postsRoot = document.querySelector("#ranking-pools");
 const poolSwitchRoot = document.querySelector("#pool-switch");
 const metricSwitchRoot = document.querySelector("#metric-switch");
+const windowSwitchRoot = document.querySelector("#window-switch");
 const statusRoot = document.querySelector("#data-status");
 const showMoreButton = document.querySelector("#show-more");
 const accountStatusRoot = document.querySelector("#account-data-status");
 const accountSnapshotRoot = document.querySelector("#account-snapshot-at");
-const METRICS = [
-  ["views", "觀看數"],
-  ["likes", "愛心數"],
-  ["replies", "回覆數"],
-  ["reposts", "轉發數"],
-  ["quotes", "引用數"],
-  ["shares", "分享數"],
-];
+const PAGE_SIZE = 10;
+const METRICS = [["views", "觀看數"], ["likes", "愛心數"], ["replies", "回覆數"], ["reposts", "轉發數"], ["quotes", "引用數"], ["shares", "分享數"]];
+const RANKING_WINDOWS = [["all", "全期間"], ["recent_30d", "近 30 天"]];
 let activePayload = null;
 let activeMetric = "views";
 let activePool = "all";
+let activeWindow = "all";
+let activeRows = [];
 let visibleCount = 3;
+let loadingMore = false;
+let knownGroups = [];
 
-function configureThreadsLink(link, permalink) {
-  link.href = permalink;
-  link.rel = "noopener";
-}
-
-function formatViews(value) {
-  return new Intl.NumberFormat("zh-TW").format(Number(value) || 0);
-}
-
+function configureThreadsLink(link, permalink) { link.href = permalink; link.rel = "noopener"; }
+function formatViews(value) { return new Intl.NumberFormat("zh-TW").format(Number(value) || 0); }
 function formatSnapshotDate(value) {
   const timestamp = Date.parse(String(value || ""));
   if (!Number.isFinite(timestamp)) return "尚未同步";
-  return new Intl.DateTimeFormat("zh-TW", {
-    year: "numeric",
-    month: "2-digit",
-    day: "2-digit",
-  }).format(new Date(timestamp));
+  return new Intl.DateTimeFormat("zh-TW", { year: "numeric", month: "2-digit", day: "2-digit" }).format(new Date(timestamp));
 }
-
-function withoutFullStops(value) {
-  return String(value || "").replace(/[。．]/g, "");
-}
+function withoutFullStops(value) { return String(value || "").replace(/[。．]/g, ""); }
 
 function metricChip(icon, label, value) {
   const chip = document.createElement("span");
@@ -56,80 +42,39 @@ function metricChip(icon, label, value) {
 
 function showAccountSummary(totals, fallback = false) {
   const accountData = totals && typeof totals === "object" ? totals : null;
-  const metricKeys = ["views", "likes", "replies", "reposts", "quotes", "shares", "postsCount"];
-  metricKeys.forEach((key) => {
+  ["views", "likes", "replies", "reposts", "quotes", "shares", "postsCount"].forEach((key) => {
     const target = document.querySelector(`[data-metric="${key}"]`);
-    if (!target) return;
-    const value = accountData?.[key];
-    if (key === "postsCount") {
-      target.textContent = value === null || value === undefined ? "—" : formatViews(value);
-      return;
-    }
-    target.textContent = value === null || value === undefined ? "—" : formatViews(value);
+    if (target) target.textContent = accountData?.[key] === null || accountData?.[key] === undefined ? "—" : formatViews(accountData[key]);
   });
   if (accountSnapshotRoot) accountSnapshotRoot.textContent = formatSnapshotDate(accountData?.latestSnapshotAt);
   if (!accountStatusRoot) return;
-  if (!accountData) {
-    accountStatusRoot.textContent = "帳號總覽尚待同步";
-  } else if (fallback) {
-    accountStatusRoot.textContent = "總覽快照（資料暫時更新中）";
-  } else {
-    accountStatusRoot.textContent = "目前已同步貼文的最新成效加總";
-  }
+  accountStatusRoot.textContent = !accountData ? "帳號總覽尚待同步" : fallback ? "總覽快照（資料暫時更新中）" : "目前已同步貼文的最新成效加總";
 }
 
 function groupsFromPayload(payload) {
   if (Array.isArray(payload?.groups) && payload.groups.length) return payload.groups;
   const data = Array.isArray(payload?.data) ? payload.data : [];
-  return [{
-    slug: "all",
-    name: "全部排行",
-    displayName: "熱門貼文",
-    description: "所有已同步 Threads 貼文",
-    isSystem: true,
-    postCount: data.length,
-    data,
-  }];
+  return [{ slug: "all", name: "全部排行", displayName: "熱門貼文", description: "所有已同步 Threads 貼文", isSystem: true, postCount: data.length, data }];
 }
+function selectedGroup(payload = activePayload) { return groupsFromPayload(payload).find((group) => group.slug === activePool) || null; }
 
-function renderMetricSwitch() {
-  if (!metricSwitchRoot) return;
-  metricSwitchRoot.replaceChildren();
-  METRICS.forEach(([key, label]) => {
+function renderSwitch(root, choices, activeValue, onChange) {
+  if (!root) return;
+  root.replaceChildren();
+  choices.forEach(([key, label]) => {
     const button = document.createElement("button");
     button.type = "button";
-    button.className = `switch-button${activeMetric === key ? " is-active" : ""}`;
+    button.className = `switch-button${activeValue === key ? " is-active" : ""}`;
     button.textContent = label;
-    button.setAttribute("aria-pressed", String(activeMetric === key));
-    button.addEventListener("click", () => {
-      if (activeMetric === key) return;
-      activeMetric = key;
-      visibleCount = 3;
-      renderMetricSwitch();
-      loadPosts();
-    });
-    metricSwitchRoot.append(button);
+    button.setAttribute("aria-pressed", String(activeValue === key));
+    button.addEventListener("click", () => key !== activeValue && onChange(key));
+    root.append(button);
   });
 }
-
+function renderMetricSwitch() { renderSwitch(metricSwitchRoot, METRICS, activeMetric, (key) => { activeMetric = key; resetAndLoad(); }); }
+function renderWindowSwitch() { renderSwitch(windowSwitchRoot, RANKING_WINDOWS, activeWindow, (key) => { activeWindow = key; resetAndLoad(); }); }
 function renderPoolSwitch(groups) {
-  if (!poolSwitchRoot) return;
-  poolSwitchRoot.replaceChildren();
-  const choices = groups.map((group) => ({ slug: group.slug, label: group.displayName || group.name }));
-  choices.forEach((choice) => {
-    const button = document.createElement("button");
-    button.type = "button";
-    button.className = `switch-button${activePool === choice.slug ? " is-active" : ""}`;
-    button.textContent = choice.label;
-    button.setAttribute("aria-pressed", String(activePool === choice.slug));
-    button.addEventListener("click", () => {
-      activePool = choice.slug;
-      visibleCount = 3;
-      renderPoolSwitch(groups);
-      showPosts(activePayload);
-    });
-    poolSwitchRoot.append(button);
-  });
+  renderSwitch(poolSwitchRoot, groups.map((group) => [group.slug, group.displayName || group.name]), activePool, (key) => { activePool = key; resetAndLoad(); });
 }
 
 function makePostItem(post, index) {
@@ -145,26 +90,26 @@ function makePostItem(post, index) {
   const excerpt = document.createElement("p");
   excerpt.className = "post-excerpt";
   excerpt.textContent = withoutFullStops(post.excerpt);
-  const metricEntries = [
-    ["♡", "喜歡", post.likes],
-    ["◌", "回覆", post.replies],
-    ["↻", "轉發", post.reposts],
-    ["↗", "引用", post.quotes],
-    ["⇧", "分享", post.shares],
-  ].filter(([, , value]) => value !== undefined && value !== null);
   const engagement = document.createElement("div");
   engagement.className = "post-engagement";
-  metricEntries.forEach(([icon, label, value]) => engagement.append(metricChip(icon, label, value)));
+  [["♡", "喜歡", post.likes], ["◌", "回覆", post.replies], ["↻", "轉發", post.reposts], ["↗", "引用", post.quotes], ["⇧", "分享", post.shares]]
+    .filter(([, , value]) => value !== undefined && value !== null)
+    .forEach(([icon, label, value]) => engagement.append(metricChip(icon, label, value)));
   copy.append(title, excerpt, engagement);
 
   const meta = document.createElement("div");
   meta.className = "post-meta";
+  const performance = document.createElement("div");
   const metric = document.createElement("strong");
   metric.className = "post-views";
   metric.textContent = formatViews(post[activeMetric]);
   const metricUnit = document.createElement("small");
   metricUnit.textContent = METRICS.find(([key]) => key === activeMetric)?.[1] || "成效";
   metric.append(metricUnit);
+  const observed = document.createElement("small");
+  observed.className = "post-observed-at";
+  observed.textContent = `更新 ${formatSnapshotDate(post.observedAt)}`;
+  performance.append(metric, observed);
   const threads = document.createElement("a");
   threads.className = "threads-badge";
   configureThreadsLink(threads, post.permalink);
@@ -178,7 +123,7 @@ function makePostItem(post, index) {
   const threadsText = document.createElement("span");
   threadsText.textContent = "Threads ↗";
   threads.append(threadsIcon, threadsText);
-  meta.append(metric, threads);
+  meta.append(performance, threads);
   item.append(rank, copy, meta);
   return item;
 }
@@ -186,84 +131,106 @@ function makePostItem(post, index) {
 function showPosts(payload, fallback = false) {
   activePayload = payload;
   const groups = groupsFromPayload(payload);
-  renderPoolSwitch(groups);
-  const visibleGroups = groups.filter((group) => group.slug === activePool);
+  knownGroups = [...new Map([...knownGroups, ...groups].map((group) => [group.slug, group])).values()];
+  renderPoolSwitch(knownGroups);
   postsRoot.replaceChildren();
-  if (!visibleGroups.length) {
+  const group = selectedGroup();
+  if (!group) {
     postsRoot.textContent = "目前沒有可顯示的排行池";
     showMoreButton.hidden = true;
     return;
   }
-
-  let hasMore = false;
-  visibleGroups.forEach((group) => {
-    const section = document.createElement("section");
-    section.className = "ranking-pool";
-    const heading = document.createElement("div");
-    heading.className = "ranking-pool-heading";
-    const title = document.createElement("h3");
-    title.textContent = group.displayName || group.name || "排行池";
-    const count = document.createElement("span");
-    count.textContent = `${Number(group.postCount ?? group.data?.length ?? 0).toLocaleString("zh-TW")} 篇`;
-    heading.append(title, count);
-    if (group.description) {
-      const description = document.createElement("p");
-      description.textContent = group.description;
-      heading.append(description);
-    }
-    const list = document.createElement("ol");
-    list.className = "post-list";
-    const allPosts = Array.isArray(group.data) ? group.data : [];
-    const posts = allPosts.slice(0, visibleCount);
-    allPosts.length > visibleCount && (hasMore = true);
-    posts.forEach((post, index) => list.append(makePostItem(post, index)));
-    if (!posts.length) {
-      const empty = document.createElement("li");
-      empty.className = "post-loading";
-      empty.textContent = "這個排行池目前尚無可顯示貼文";
-      list.append(empty);
-    }
-    section.append(heading, list);
-    postsRoot.append(section);
-  });
-
-  showMoreButton.hidden = fallback || !hasMore || visibleCount >= 10;
-  showMoreButton.textContent = visibleCount >= 10 ? "" : "看第 4 名到第 10 名 ↓";
-  if (fallback) {
-    statusRoot.hidden = false;
-    statusRoot.textContent = "作品集快照（資料暫時更新中）";
-  } else if (payload?.meta?.stale) {
-    statusRoot.hidden = false;
-    statusRoot.textContent = "資料更新中（顯示最近一次觀測）";
-  } else {
-    statusRoot.hidden = true;
+  const section = document.createElement("section");
+  section.className = "ranking-pool";
+  const heading = document.createElement("div");
+  heading.className = "ranking-pool-heading";
+  const title = document.createElement("h3");
+  title.textContent = group.displayName || group.name || "排行池";
+  const total = Number(group.postCount ?? activeRows.length ?? 0);
+  const count = document.createElement("span");
+  count.textContent = `已顯示 ${Math.min(visibleCount, activeRows.length).toLocaleString("zh-TW")} / ${total.toLocaleString("zh-TW")} 篇`;
+  heading.append(title, count);
+  if (group.description) {
+    const description = document.createElement("p");
+    description.textContent = group.description;
+    heading.append(description);
   }
+  const list = document.createElement("ol");
+  list.className = "post-list";
+  activeRows.slice(0, visibleCount).forEach((post, index) => list.append(makePostItem(post, index)));
+  if (!activeRows.length) {
+    const empty = document.createElement("li");
+    empty.className = "post-loading";
+    empty.textContent = "這個排行池目前尚無可顯示貼文";
+    list.append(empty);
+  }
+  section.append(heading, list);
+  postsRoot.append(section);
+
+  const hasMore = activeRows.length < total;
+  showMoreButton.hidden = fallback || (!hasMore && visibleCount >= activeRows.length);
+  if (!showMoreButton.hidden) showMoreButton.textContent = visibleCount < activeRows.length
+    ? `看第 ${visibleCount + 1} 名到第 ${Math.min(activeRows.length, visibleCount + PAGE_SIZE)} 名 ↓`
+    : `再顯示 ${Math.min(PAGE_SIZE, total - activeRows.length)} 篇（已顯示 ${activeRows.length} / ${total}） ↓`;
+  if (fallback) { statusRoot.hidden = false; statusRoot.textContent = "作品集快照（資料暫時更新中）"; }
+  else if (payload?.meta?.stale) { statusRoot.hidden = false; statusRoot.textContent = "資料更新中（顯示最近一次觀測）"; }
+  else statusRoot.hidden = true;
 }
 
-showMoreButton.addEventListener("click", () => {
-  visibleCount = 10;
-  showPosts(activePayload);
-  showMoreButton.focus();
+function resetAndLoad() {
+  activeRows = [];
+  visibleCount = 3;
+  renderMetricSwitch();
+  renderWindowSwitch();
+  loadPosts();
+}
+
+showMoreButton.addEventListener("click", async () => {
+  if (loadingMore) return;
+  if (visibleCount < activeRows.length) {
+    visibleCount = Math.min(visibleCount + PAGE_SIZE, activeRows.length);
+    showPosts(activePayload);
+    showMoreButton.focus();
+    return;
+  }
+  loadingMore = true;
+  showMoreButton.disabled = true;
+  try {
+    await loadPosts({ append: true });
+    visibleCount = Math.min(visibleCount + PAGE_SIZE, activeRows.length);
+  } finally {
+    loadingMore = false;
+    showMoreButton.disabled = false;
+    showMoreButton.focus();
+  }
 });
 
-async function loadPosts() {
+async function loadPosts({ append = false } = {}) {
   const controller = new AbortController();
   const timer = window.setTimeout(() => controller.abort(), 6000);
   try {
-    const response = await fetch(`${endpointBase}?metric=${encodeURIComponent(activeMetric)}`, { signal: controller.signal, headers: { accept: "application/json" } });
+    const params = new URLSearchParams({ metric: activeMetric, window: activeWindow, offset: String(append ? activeRows.length : 0), limit: String(PAGE_SIZE) });
+    if (knownGroups.length) params.set("pool", activePool);
+    const response = await fetch(`${endpointBase}?${params}`, { signal: controller.signal, headers: { accept: "application/json" } });
     if (!response.ok) throw new Error("content unavailable");
     const payload = await response.json();
+    const group = selectedGroup(payload);
+    const page = Array.isArray(group?.data) ? group.data : [];
+    activeRows = append ? [...activeRows, ...page.filter((post) => !activeRows.some((row) => row.threadId === post.threadId))] : page;
     showPosts(payload);
     showAccountSummary(payload?.contentTotals ?? window.SQM_FALLBACK_ACCOUNT?.data, !payload?.contentTotals);
   } catch {
-    showPosts(window.SQM_FALLBACK_POSTS, true);
-    showAccountSummary(window.SQM_FALLBACK_ACCOUNT?.data, true);
-  } finally {
-    window.clearTimeout(timer);
-  }
+    if (!append) {
+      const fallback = window.SQM_FALLBACK_POSTS;
+      activeRows = Array.isArray(selectedGroup(fallback)?.data) ? selectedGroup(fallback).data : [];
+      showPosts(fallback, true);
+      showAccountSummary(window.SQM_FALLBACK_ACCOUNT?.data, true);
+    }
+  } finally { window.clearTimeout(timer); }
 }
 
 renderMetricSwitch();
+renderWindowSwitch();
 document.querySelector("#year").textContent = String(new Date().getFullYear());
 showAccountSummary(null);
 loadPosts();
