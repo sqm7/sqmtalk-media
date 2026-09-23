@@ -15,7 +15,7 @@ let activeMetric = "views";
 let activePool = "all";
 let activeWindow = "all";
 let activeRows = [];
-let visibleCount = 3;
+let visibleCount = PAGE_SIZE;
 let loadingMore = false;
 let knownGroups = [];
 
@@ -148,7 +148,7 @@ function showPosts(payload, fallback = false) {
   title.textContent = group.displayName || group.name || "排行池";
   const total = Number(group.postCount ?? activeRows.length ?? 0);
   const count = document.createElement("span");
-  count.textContent = `已顯示 ${Math.min(visibleCount, activeRows.length).toLocaleString("zh-TW")} / ${total.toLocaleString("zh-TW")} 篇`;
+  count.textContent = `前 ${Math.min(visibleCount, activeRows.length).toLocaleString("zh-TW")} 篇／共 ${total.toLocaleString("zh-TW")} 篇`;
   heading.append(title, count);
   if (group.description) {
     const description = document.createElement("p");
@@ -167,11 +167,7 @@ function showPosts(payload, fallback = false) {
   section.append(heading, list);
   postsRoot.append(section);
 
-  const hasMore = activeRows.length < total;
-  showMoreButton.hidden = fallback || (!hasMore && visibleCount >= activeRows.length);
-  if (!showMoreButton.hidden) showMoreButton.textContent = visibleCount < activeRows.length
-    ? `看第 ${visibleCount + 1} 名到第 ${Math.min(activeRows.length, visibleCount + PAGE_SIZE)} 名 ↓`
-    : `再顯示 ${Math.min(PAGE_SIZE, total - activeRows.length)} 篇（已顯示 ${activeRows.length} / ${total}） ↓`;
+  showMoreButton.hidden = true;
   if (fallback) { statusRoot.hidden = false; statusRoot.textContent = "作品集快照（資料暫時更新中）"; }
   else if (payload?.meta?.stale) { statusRoot.hidden = false; statusRoot.textContent = "資料更新中（顯示最近一次觀測）"; }
   else statusRoot.hidden = true;
@@ -179,7 +175,7 @@ function showPosts(payload, fallback = false) {
 
 function resetAndLoad() {
   activeRows = [];
-  visibleCount = 3;
+  visibleCount = PAGE_SIZE;
   renderMetricSwitch();
   renderWindowSwitch();
   loadPosts();
